@@ -1,0 +1,2 @@
+manga_ocr==0.1.7
+Pillow==9.1.0
