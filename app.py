@@ -45,8 +45,6 @@ def run(image: PIL.Image.Image, mocr: MangaOcr) -> str:
 
 
 def main():
-    gr.close_all()
-
     args = parse_args()
 
     mocr = MangaOcr()
