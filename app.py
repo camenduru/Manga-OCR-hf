@@ -13,7 +13,7 @@ from manga_ocr import MangaOcr
 
 TITLE = 'kha-white/manga-ocr'
 DESCRIPTION = 'This is a demo for https://github.com/kha-white/manga-ocr.'
-ARTICLE = None
+ARTICLE = '<center><img src="https://visitor-badge.glitch.me/badge?page_id=hysts.manga-ocr" alt="visitor badge"/></center>'
 
 
 def parse_args() -> argparse.Namespace:
