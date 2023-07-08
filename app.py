@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import functools
+import os
 import pathlib
 import urllib.request
 
@@ -10,8 +11,7 @@ import gradio as gr
 import PIL.Image
 from manga_ocr import MangaOcr
 
-TITLE = 'Manga OCR'
-DESCRIPTION = 'This is an unofficial demo for https://github.com/kha-white/manga-ocr.'
+DESCRIPTION = '# [Manga OCR](https://github.com/kha-white/manga-ocr)'
 
 
 def download_sample_images() -> list[pathlib.Path]:
@@ -29,16 +29,23 @@ def run(image: PIL.Image.Image, mocr: MangaOcr) -> str:
 
 
 mocr = MangaOcr()
-func = functools.partial(run, mocr=mocr)
+fn = functools.partial(run, mocr=mocr)
 
 image_paths = download_sample_images()
 examples = [[path.as_posix()] for path in image_paths]
 
-gr.Interface(
-    fn=func,
-    inputs=gr.Image(label='Input', type='pil'),
-    outputs=gr.Text(label='Output'),
-    examples=examples,
-    title=TITLE,
-    description=DESCRIPTION,
-).launch(show_api=False)
+with gr.Blocks(css='style.css') as demo:
+    gr.Markdown(DESCRIPTION)
+    with gr.Row():
+        with gr.Column():
+            image = gr.Image(label='Input', type='pil')
+            run_button = gr.Button('Run')
+        with gr.Column():
+            result = gr.Text(label='Output')
+    gr.Examples(examples=examples,
+                inputs=image,
+                outputs=result,
+                fn=fn,
+                cache_examples=os.getenv('CACHE_EXAMPLES') == '1')
+    run_button.click(fn=fn, inputs=image, outputs=result, api_name='run')
+demo.queue().launch()
